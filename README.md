@@ -1,124 +1,78 @@
-# 🗣️ Briskk Speech-to-Text Assignment
+# 🎤 VozRecX: Speech-to-Text Search Assistant
 
-## 📌 Introduction
+> ⚠️ **Hosting Notice**: Currently not hosted on AWS Lambda due to payment verification issues during signup. Docker Deployment Available.
 
-Welcome to the **Briskk AI Speech-to-Text Assignment**! 🎤  
-This challenge will test your **AI integration, API development, and problem-solving skills** through a **structured sequence of tasks**.  
+## 📌 Overview
+VozRecX is a robust speech-to-text search assistant that processes voice input in real-time. It features noise reduction, smart autocomplete suggestions, and WebSocket support for live speech processing.
 
-🚀 **Your Goal:** Build a **real-time, noise-resilient voice-based search assistant** that:
-✅ Converts voice input (audio file or live mic input) into text.  
-✅ Suggests **smart search autocompletions** based on user intent.  
-✅ Handles **noisy background audio** and improves speech accuracy.  
-✅ Supports **real-time speech-to-search via WebSockets**.  
+## ✨ Key Features
+- Voice-to-text conversion using OpenAI Whisper
+- Background noise reduction with RNNoise
+- AI-powered search autocompletion
+- Real-time speech processing via WebSockets
+- Docker deployment support
 
----
+## 🛠️ Technology Stack
+- FastAPI: Modern, fast web framework for building APIs
+- OpenAI Whisper: Robust speech recognition model
+- RNNoise: Audio noise reduction
+- Redis: In-memory data store
+- WebSockets
+- Docker
+- SentenceTransformer: For semantic search
+- PyDub: Audio processing
 
-## 📋 **Assignment Structure**
-To ensure a smooth progression, complete each **task in sequence**:  
+## 🚀 Setup & Installation
 
-### **🔹 Task 1: Speech Recognition API (Baseline)**
-✅ Implement a **FastAPI service** that:  
-- Accepts an **audio file** and converts speech to text using **OpenAI Whisper or Mozilla DeepSpeech**.  
-- Returns JSON output `{ "text": "<transcribed text>" }`.  
-- **Test Input:** `sample_data/clean_audio/sample_english.wav`  
-- **Expected Output:** `"Find me a red dress"`  
+### Prerequisites
+- Python 3.8+
+- Redis server
+- FFmpeg
+- CUDA-capable GPU (optional)
 
-**📌 API:**  
-```http
-POST /api/voice-to-text
-Content-Type: multipart/form-data
-```  
-
----
-
-### **🔹 Task 2: Handle Noisy Audio (Advanced AI Processing)**
-✅ Enhance speech recognition by:  
-- **Filtering background noise** using **RNNoise, DeepFilterNet, or PyDub**.  
-- Comparing accuracy with and without noise removal.  
-- **Test Input:** `sample_data/noisy_audio/sample_noisy.wav`  
-- **Expected Output (after denoising):** `"Find me a red dress"`  
-
-**📌 Evaluation Criteria:**  
-✔ Speech accuracy **before vs after** noise removal.  
-✔ Processing **time must remain <1s**.  
-
----
-
-### **🔹 Task 3: Smart Search Autocomplete (AI Ranking)**
-✅ Implement an API that:  
-- **Suggests relevant results** based on user **intent & previous searches**.  
-- **Ranks results dynamically** based on **popularity & trends**.  
-- **Test Input:** `"find me"`  
-- **Expected Output:** `[ "find me a red dress", "find me a jacket" ]`  
-
-**📌 API:**  
-```http
-GET /api/autocomplete?q=find+me
-```  
-
-**📌 How to Improve?**  
-- Store previous searches in **Redis** for ranking.  
-- Use **AI embeddings (OpenAI or BERT)** for better matching.  
-
----
-
-### **🔹 Task 4(optional): Real-Time Speech-to-Search (WebSockets)**
-✅ Upgrade the system to **process live speech queries** via WebSockets:  
-- Accept **real-time audio streams**.  
-- **Continuously transcribe & autocomplete** results dynamically.  
-- **Test:** Use a **live microphone** input.  
-
-**📌 API WebSocket:**  
-```ws
-/ws/speech-to-search
-```  
-
-✔ **Bonus**: Deploy the system using **Docker & AWS Lambda**.  
-
----
-
-## 🔬 **Test Cases** (For Self-Validation)
-
-| **Test Case** | **Input** | **Expected Output** |
-|--------------|----------|----------------|
-| **Speech Recognition** | `sample_data/clean_audio/sample_english.wav` | `"Find me a red dress"` |
-| **Noisy Speech** | `sample_data/noisy_audio/sample_noisy.wav` | `"Find me a red dress"` |
-| **Autocomplete Query** | `"find me"` | `["find me a red dress", "find me a jacket"]` |
-| **Live Streaming** | Microphone | Real-time suggestions |
-
-📂 All **sample audio files** are provided in `sample_data/`.  
-
----
-
-## 🏗️ **Setup & Running Instructions**
-
-### **1️⃣ Install Dependencies**
+### Installation
 ```bash
-pip install fastapi uvicorn openai-whisper soundfile numpy scipy
-```
+# Clone repository
+git clone https://github.com/AbhishekNaik1112/VozRecX.git
 
-### **2️⃣ Run the API**
-```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start Redis server
+docker run -d -p 6379:6379 redis
+
+# Start the API server
 uvicorn src.main:app --reload
 ```
 
-### **3️⃣ Test API**
-- Open **Swagger Docs** → [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)  
-- Upload `sample_audio_english.wav` and check transcription accuracy.  
+## 📚 API Documentation
+Available endpoints:
+- `POST /api/voice-to-text-noisy`: Convert audio to text
+- `GET /api/autocomplete`: Get search suggestions
+- `WS /ws/speech-to-search`: Real-time speech processing
 
----
+Visit `http://localhost:8000/docs` for Swagger documentation.
 
-## 🚀 **Submission Guidelines**
+## 🔧 Technical Implementation
 
-📌 **Fork this repo & create a new branch `candidate-<yourname>`**.  
-📌 **Push your implementation & submit a Pull Request (PR)**.  
-📌 **Explain your approach in a README ( Document trade-offs (e.g., why Whisper vs. DeepSpeech, Redis vs. Pinecone for ranking))**.
-📌 **Good to have - A deployed version **.  
+### Design Choices
+- **Whisper over DeepSpeech**: More accurate, smaller models, better noise handling, and actively maintained.  
+- **Redis over Pinecone**: Simple setup, low latency, cost-effective, and great for AI-powered search.
 
-For questions, contact us at: **wizard@briskk.one**  
+### Challenges & Solutions
+1. **Real-time Processing using websockets?**: Referred Github, docs and fastapi+ws example codes and some videos. 
+2. **Choice in Noise Reduction Library?**: Used noisereduce library for easier implementation
+3. **How to Rank text?**: Used hybrid scoring (70% similarity, 30% popularity)
 
----
+### Performance Optimizations
+- Better audio buffer size?
+- Redis caching for repeating words
 
-## 📩 **Contact & Discussion**
+## 🔮 Future Improvements
+1. Rate Limiting
+2. Language Supports
 
-📢 Have questions? Drop an email at **wizard@briskk.one** 🚀
+## 📦 Deployment
+```bash
+docker-compose up -d
+```

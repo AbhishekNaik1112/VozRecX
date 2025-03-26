@@ -1,5 +1,0 @@
-{
-    "queries": [
-        {"input": "find me", "expected_output": ["find me a red dress", "find me a jacket"]}
-    ]
-}
