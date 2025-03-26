@@ -30,6 +30,11 @@ VozRecX is a robust speech-to-text search assistant that processes voice input i
 - FFmpeg
 - CUDA-capable GPU (optional)
 
+## 📦 Deployment
+```bash
+docker-compose up -d
+```
+
 ### Installation
 ```bash
 # Clone repository
@@ -71,8 +76,3 @@ Visit `http://localhost:8000/docs` for Swagger documentation.
 ## 🔮 Future Improvements
 1. Rate Limiting
 2. Language Supports
-
-## 📦 Deployment
-```bash
-docker-compose up -d
-```
